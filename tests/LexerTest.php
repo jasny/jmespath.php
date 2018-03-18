@@ -93,6 +93,7 @@ class LexerTest extends TestCase
             array('3 + 5', 1, 'plus'),
             array('{ total: invoices[0] + 5 }', 7, 'plus'),
             array('{ total: invoice.amount + invoice.tax }', 6, 'plus'),
+            array('{ "foo+test@example.com": 10 }', 1, 'quoted_identifier'),
 
             array('3 - 5', 1, 'minus'),
             array('{ total: -3 + invoice.amout - invoice.tax }', 3, 'number'),
@@ -108,6 +109,7 @@ class LexerTest extends TestCase
             array('[[*], *]', 2, 'star'),
             array('[[*], *]', 5, 'star'),
             array('foo.*', 2, 'star'),
+            array('`22` * 3', 1, 'multiply'),
 
             array('3 / 5', 1, 'divide'),
             array('{ total: invoice.amount / invoice.tax }', 6, 'divide'),
