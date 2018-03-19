@@ -17,7 +17,7 @@ class ParserTest extends TestCase
     public function testMatchesFirstTokens()
     {
         $p = new Parser(new Lexer());
-        $p->parse('.bar');
+        $result = $p->parse('.bar');
     }
 
     /**
