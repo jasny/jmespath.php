@@ -1,14 +1,14 @@
 {
-  "name": "mtdowling/jmespath.php",
+  "name": "geertvanbommel/jmespath.php",
   "description": "Declaratively specify how to extract elements from a JSON document",
   "keywords": ["json", "jsonpath"],
   "license": "MIT",
 
   "authors": [
     {
-      "name": "Michael Dowling",
-      "email": "mtdowling@gmail.com",
-      "homepage": "https://github.com/mtdowling"
+      "name": "Geert Van Bommel",
+      "email": "geertvanbommel@gmail.com",
+      "homepage": "https://github.com/geertvanbommel"
     }
   ],
 
