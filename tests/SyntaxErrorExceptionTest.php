@@ -22,7 +22,7 @@ abc,def
    ^
 Found comma
 EOT;
-        $this->assertContains($expected, $e->getMessage());
+        $this->assertStringContainsString($expected, $e->getMessage());
     }
 
     public function testCreatesWithArray()
@@ -38,6 +38,6 @@ abc,def
    ^
 Expected one of the following: dot, eof; found comma ","
 EOT;
-        $this->assertContains($expected, $e->getMessage());
+        $this->assertStringContainsString($expected, $e->getMessage());
     }
 }

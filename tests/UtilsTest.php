@@ -34,11 +34,9 @@ class UtilsTest extends TestCase
         $this->assertEquals($type, Utils::type($given));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testThrowsForInvalidArg()
     {
+        $this->expectException(\InvalidArgumentException::class);
         Utils::type(new _TestClass());
     }
 
