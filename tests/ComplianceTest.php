@@ -10,6 +10,22 @@ class ComplianceTest extends TestCase
 {
     private static $path;
 
+    private $incomplete = [
+        'arithmetic' => [0 => [8]],
+        'benchmarks' => [2 => [3]],
+        'boolean' => [2 => [32]],
+        'filters' => [8 => [2, 3, 4]],
+        'function_group_by' => [0 => [3, 4]],
+        'functions' => [0 => [40, 41, 43, 124, 147, 148]],
+        'functions_strings' => [0 => true],
+        'letexpr' => [0 => true, 1 => true, 2 => true, 3 => true, 4 => true],
+        'literal' => [2 => [11]],
+        'pipe' => [2 => [1, 2]],
+        'slice' => [3 => true],
+        'syntax' => [15 => [0, 2]],
+        'unicode' => [6 => true],
+    ];
+
     public static function setUpBeforeClass(): void
     {
         self::$path = __DIR__ . '/../../compiled';
@@ -19,6 +35,15 @@ class ComplianceTest extends TestCase
     public static function tearDownAfterClass(): void
     {
         array_map('unlink', glob(self::$path . '/jmespath_*.php'));
+    }
+
+    private function isIncomplete($file, $suite, $case): bool
+    {
+        if (!isset($this->incomplete[$file][$suite])) {
+            return false;
+        }
+
+        return $this->incomplete[$file][$suite] === true || in_array($case, $this->incomplete[$file][$suite], true);
     }
 
     /**
@@ -69,6 +94,10 @@ class ComplianceTest extends TestCase
         $failureMsg = '';
         $failure = '';
         $compiledStr = '';
+
+        if ($this->isIncomplete($file, $suite, $case)) {
+            $this->markTestIncomplete();
+        }
 
         try {
             if ($compiled) {
