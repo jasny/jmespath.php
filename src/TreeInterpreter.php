@@ -190,18 +190,20 @@ class TreeInterpreter
                     return !Utils::isEqual($left, $right);
                 } else {
                     return self::relativeCmp($left, $right, $node['value']);
-                }            
+                }
 
             case 'arithmetic_multiply_or_divide_or_mod':
                 $left = $this->dispatch($node['children'][0], $value);
                 $right = $this->dispatch($node['children'][1], $value);
 
-                if ($node['value'] == '*') {
+                if ($node['value'] === '*' || $node['value'] === '×') {
                     return $left * $right;
-                } elseif ($node['value'] == '/') {
+                } elseif ($node['value'] === '/' || $node['value'] === '÷') {
                     return $left / $right;
-                } elseif ($node['value'] == '%') {
+                } elseif ($node['value'] === '%') {
                     return $left % $right;
+                } elseif ($node['value'] === '//') {
+                    return (int)($left / $right);
                 }
                 return 0;
 

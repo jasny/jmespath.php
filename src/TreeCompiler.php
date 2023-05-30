@@ -407,9 +407,9 @@ class TreeCompiler
             ->dispatch($node['children'][1])
             ->write('%s = $value;', $b);
 
-        if ($node['value'] == '+') {
+        if ($node['value'] === '+') {
             $this->write('$value = %s + %s;', $a, $b);
-        } elseif ($node['value'] == '-') {
+        } elseif ($node['value'] === '-' || $node['value'] === '–') {
             $this->write('$value = %s - %s;', $a, $b);
         } else {
             $this->write(
@@ -436,12 +436,14 @@ class TreeCompiler
             ->dispatch($node['children'][1])
             ->write('%s = $value;', $b);
 
-        if ($node['value'] == '*') {
+        if ($node['value'] === '*' || $node['value'] === '×') {
             $this->write('$value = %s * %s;', $a, $b);
-        } elseif ($node['value'] == '/') {
+        } elseif ($node['value'] === '/' || $node['value'] === '÷') {
             $this->write('$value = %s / %s;', $a, $b);
-        } elseif ($node['value'] == '%') {
+        } elseif ($node['value'] === '%') {
             $this->write('$value = %s %% %s;', $a, $b);
+        } elseif ($node['value'] === '//') {
+            $this->write('$value = (int)(%s / %s);', $a, $b);
         } else {
             $this->write(
                 '$value = (is_int(%s) || is_float(%s)) && (is_int(%s) || is_float(%s)) && %s %s %s;',

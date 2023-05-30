@@ -19,6 +19,7 @@ class Parser
     private static $currentNode = ['type' => T::T_CURRENT];
 
     private static $bp = [
+        T::T_UNKNOWN           => 0,
         T::T_EOF               => 0,
         T::T_QUOTED_IDENTIFIER => 0,
         T::T_IDENTIFIER        => 0,
@@ -103,6 +104,11 @@ class Parser
         }
 
         return $left;
+    }
+
+    private function nud_unknown()
+    {
+        throw $this->syntax("Unknown token");
     }
 
     private function nud_root()
@@ -233,7 +239,12 @@ class Parser
     private function led_arithmetic_multiply_or_divide_or_mod(array $left) {
         $token = $this->token;
         $this->next();
-        
+
+        if ($token['value'] === '/' && $this->token['value'] === '/') {
+            $token['value'] = '//';
+            $this->next();
+        }
+
         return [
             'type'     => T::T_ARITHMETIC_MDM,
             'value'    => $token['value'],

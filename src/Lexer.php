@@ -67,6 +67,9 @@ class Lexer
         '+'  => self::STATE_ARITHMETIC_OP,
         '/'  => self::STATE_ARITHMETIC_OP,
         '%'  => self::STATE_ARITHMETIC_OP,
+        '×'  => self::STATE_ARITHMETIC_OP,
+        '÷'  => self::STATE_ARITHMETIC_OP,
+        '–'  => self::STATE_ARITHMETIC_OP,
         '-'  => self::STATE_FORDOUBLEMAP,
         '*'  => self::STATE_FORDOUBLEMAP,
         '0'  => self::STATE_NUMBER,
@@ -190,8 +193,11 @@ class Lexer
     private $arithmeticTokens = [
         '+' => self::T_ARITHMETIC_PM,
         '-' => self::T_ARITHMETIC_PM,
+        '–' => self::T_ARITHMETIC_PM,
         '*' => self::T_ARITHMETIC_MDM,
+        '×' => self::T_ARITHMETIC_MDM,
         '/' => self::T_ARITHMETIC_MDM,
+        '÷' => self::T_ARITHMETIC_MDM,
         '%' => self::T_ARITHMETIC_MDM,
     ];
 
@@ -212,7 +218,7 @@ class Lexer
             goto eof;
         }
 
-        $chars = str_split($input);
+        $chars = mb_str_split($input);
 
         while (false !== ($current = current($chars))) {
 
