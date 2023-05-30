@@ -106,11 +106,6 @@ class Parser
         return $left;
     }
 
-    private function nud_unknown()
-    {
-        throw $this->syntax("Unknown token");
-    }
-
     private function nud_root()
     {
         $token = $this->token;
