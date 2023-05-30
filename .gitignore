@@ -6,3 +6,5 @@ artifacts/
 tests/ArithmeticTest.php
 tests/arithmetic
 .vscode
+.idea
+.phpunit.result.cache

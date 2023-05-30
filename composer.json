@@ -9,17 +9,21 @@
       "name": "Michael Dowling",
       "email": "mtdowling@gmail.com",
       "homepage": "https://github.com/mtdowling"
+    },
+    {
+      "name": "Arnold Daniels",
+      "homepage": "https://jasny.net"
     }
   ],
 
   "require": {
-    "php": "^5.4 || ^7.0 || ^8.0",
+    "php": "^7.1 || ^8.0",
     "symfony/polyfill-mbstring": "^1.17"
   },
 
   "require-dev": {
     "composer/xdebug-handler": "^1.4 || ^2.0",
-    "phpunit/phpunit": "^4.8.36 || ^7.5.15"
+    "phpunit/phpunit": "^9.0"
   },
 
   "autoload": {
@@ -30,7 +34,11 @@
   },
 
   "bin": ["bin/jp.php"],
-
+  
+  "scripts": {
+      "test": "phpunit --testdox --colors=always"
+  },
+  
   "extra": {
     "branch-alias": {
       "dev-master": "2.6-dev"

@@ -10,13 +10,13 @@ class ComplianceTest extends TestCase
 {
     private static $path;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$path = __DIR__ . '/../../compiled';
         array_map('unlink', glob(self::$path . '/jmespath_*.php'));
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         array_map('unlink', glob(self::$path . '/jmespath_*.php'));
     }
@@ -25,6 +25,35 @@ class ComplianceTest extends TestCase
      * @dataProvider complianceProvider
      */
     public function testPassesCompliance(
+        $data,
+        $expression,
+        $result,
+        $error,
+        $file,
+        $suite,
+        $case,
+        $asAssoc
+    ) {
+        $this->compliance($data, $expression, $result, $error, $file, $suite, $case, false, $asAssoc);
+    }
+
+    /**
+     * @dataProvider complianceProvider
+     */
+    public function testPassesComplianceCompiled(
+        $data,
+        $expression,
+        $result,
+        $error,
+        $file,
+        $suite,
+        $case,
+        $asAssoc
+    ) {
+        $this->compliance($data, $expression, $result, $error, $file, $suite, $case, true, $asAssoc);
+    }
+
+    public function compliance(
         $data,
         $expression,
         $result,
@@ -61,6 +90,8 @@ class ComplianceTest extends TestCase
 
         $file = __DIR__ . '/compliance/' . $file . '.json';
         $failure .= "\n{$compiledStr}php bin/jp.php --file {$file} --suite {$suite} --case {$case}\n\n"
+            . "Given: " . $this->prettyJson($data) . "\n\n"
+            . "Expression: $expression\n\n"
             . "Result: " . $this->prettyJson($evalResult) . "\n\n"
             . "Expected: " . $this->prettyJson($result) . "\n\n";
         $failure .= 'Associative? ' . var_export($asAssoc, true) . "\n\n";
@@ -84,17 +115,17 @@ class ComplianceTest extends TestCase
 
         $files = array_map(function ($f) {
             return basename($f, '.json');
-        }, glob(__DIR__ . '/compliance/*.json'));
+        }, glob(__DIR__ . '/compliance/tests/*.json'));
 
         foreach ($files as $name) {
-            $contents = file_get_contents(__DIR__ . "/compliance/{$name}.json");
+            $contents = file_get_contents(__DIR__ . "/compliance/tests/{$name}.json");
             foreach ([true, false] as $asAssoc) {
                 $json = json_decode($contents, true);
                 $jsonObj = json_decode($contents);
                 foreach ($json as $suiteNumber => $suite) {
                     $given = $asAssoc ? $suite['given'] : $jsonObj[$suiteNumber]->given;
                     foreach ($suite['cases'] as $caseNumber => $case) {
-                        $caseData = [
+                        $cases["$name / suite $suiteNumber / case $caseNumber"] = [
                             $given,
                             $case['expression'],
                             isset($case['result']) ? $case['result'] : null,
@@ -102,12 +133,8 @@ class ComplianceTest extends TestCase
                             $name,
                             $suiteNumber,
                             $caseNumber,
-                            false,
                             $asAssoc
                         ];
-                        $cases[] = $caseData;
-                        $caseData[7] = true;
-                        $cases[] = $caseData;
                     }
                 }
             }
